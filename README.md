@@ -129,3 +129,7 @@ MIT
 ## Contributing
 
 Contributions welcome! Please open issues and PRs.
+
+---
+
+*Built with assistance from AI tooling.*
