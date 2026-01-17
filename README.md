@@ -2,6 +2,8 @@
 
 [![Tests](https://github.com/ggfevans/homebrew-launchd-updater/workflows/Tests/badge.svg)](https://github.com/ggfevans/homebrew-launchd-updater/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![macOS](https://img.shields.io/badge/macOS-10.12+-blue?logo=apple)
+![Homebrew](https://img.shields.io/badge/homebrew-required-orange?logo=homebrew)
 
 Automatically run `brew update && brew upgrade` daily on macOS using launchd. Checks for AC power and internet connectivity before running.
 
