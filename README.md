@@ -1,17 +1,17 @@
 # Homebrew launchd Updater
 
-Automatically run `brew update && brew upgrade` daily on macOS using launchd, with smart checks for AC power, internet connectivity, and automatic retries on failure.
+Automatically run `brew update && brew upgrade` daily on macOS using launchd. Checks for AC power and internet connectivity before running.
 
 ## Features
 
-- **Scheduled daily runs** at 2 AM (configurable)
-- **AC power detection** — Only runs when plugged in
-- **Internet connectivity check** — Skips if offline
-- **Automatic retries** — Up to 3 attempts with 5-minute delays
-- **Timeout protection** — 30-minute hard timeout to prevent hanging processes
-- **Clean logging** — All activity logged to `~/Library/Logs/brew-upgrade.log`
-- **Silent background execution** — No notifications or interruptions
-- **Prevents nested updates** — Sets `HOMEBREW_NO_AUTO_UPDATE=1`
+- Runs at 2 AM daily (configurable)
+- Only runs when plugged into AC power
+- Skips if offline
+- Retries up to 3 times with 5-minute delays
+- 30-minute timeout to prevent hanging
+- Logs to `~/Library/Logs/brew-upgrade.log`
+- Runs silently in background
+- Sets `HOMEBREW_NO_AUTO_UPDATE=1` to prevent nested updates
 
 ## Installation
 
@@ -45,14 +45,14 @@ launchctl load ~/Library/LaunchAgents/com.local.brew-upgrade.plist
 
 ## Configuration
 
-Edit `com.local.brew-upgrade.plist` to change:
-- **Run time**: Modify `StartCalendarInterval` (Hour and Minute keys)
-- **Timeout**: Adjust `TimeOut` value (in seconds)
+Edit `com.local.brew-upgrade.plist`:
+- Run time: Modify `StartCalendarInterval` (Hour and Minute keys)
+- Timeout: Adjust `TimeOut` value (in seconds)
 
-Edit `brew-upgrade-helper.sh` to change:
+Edit `brew-upgrade-helper.sh`:
 - `MAX_RETRIES`: Number of retry attempts (default: 3)
-- `RETRY_DELAY`: Delay between retries in seconds (default: 300 = 5 minutes)
-- `TIMEOUT`: Per-command timeout in seconds (default: 1800 = 30 minutes)
+- `RETRY_DELAY`: Delay between retries in seconds (default: 300)
+- `TIMEOUT`: Per-command timeout in seconds (default: 1800)
 
 ## Monitoring
 
@@ -87,13 +87,13 @@ Or use the provided uninstall script:
 
 ## How It Works
 
-1. **launchd scheduler** triggers the job at the scheduled time (2 AM daily)
-2. **Helper script** performs checks:
-   - Verifies Mac is connected to AC power
-   - Checks internet connectivity
-   - Runs `brew update && brew upgrade` with automatic retries
-3. **Timeout protection** ensures the process never hangs indefinitely
-4. **All output** is logged to `~/Library/Logs/brew-upgrade.log`
+1. launchd triggers the job at 2 AM daily
+2. Helper script checks:
+   - AC power connection
+   - Internet connectivity
+   - Runs `brew update && brew upgrade` with retries
+3. Timeout kills the process after 30 minutes
+4. Output logged to `~/Library/Logs/brew-upgrade.log`
 
 ## Requirements
 
@@ -112,7 +112,7 @@ Or use the provided uninstall script:
 - Make sure helper script is executable: `chmod +x ~/Library/Application\ Support/brew-upgrade-helper.sh`
 
 **Running on battery?**
-- This is by design — the job only runs when plugged in to avoid draining battery
+- By design. The job only runs when plugged in.
 
 **Manual test run:**
 ```bash
@@ -120,11 +120,20 @@ Or use the provided uninstall script:
 ```
 
 **No shell profile needed:**
-The script does not require `.zprofile` or `.zshrc` to be present—it detects brew's path dynamically using `which` and works in launchd's clean environment.
+Script doesn't need `.zprofile` or `.zshrc`. Detects brew path with `which`.
 
 ## License
 
 MIT
+
+## Testing
+
+Run the test suite to validate all scripts and configuration:
+```bash
+./test.sh
+```
+
+Requires `shellcheck` (install with `brew install shellcheck`).
 
 ## Contributing
 

@@ -4,7 +4,6 @@ set -e
 
 SUPPORT_DIR="$HOME/Library/Application Support"
 AGENTS_DIR="$HOME/Library/LaunchAgents"
-LOG_DIR="$HOME/Library/Logs"
 
 # Colors for output
 GREEN='\033[0;32m'
